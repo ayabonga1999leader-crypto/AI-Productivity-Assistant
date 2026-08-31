@@ -35,7 +35,7 @@ export const Route = createFileRoute("/meeting-notes")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: MeetingNotes;
+  component: MeetingNotes,
 });
 
 const formats = [
