@@ -81,16 +81,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "UrbanCart — South African online store" },
+      { title: "UrbanCart AI — Workplace productivity tools" },
       {
         name: "description",
         content:
-          "UrbanCart is a South African online store for street-ready essentials, priced in rands with secure checkout.",
+          "UrbanCart AI is a suite of workplace tools: smart email drafting, meeting notes summaries, task planning and a productivity chatbot.",
       },
-      { property: "og:title", content: "UrbanCart — South African online store" },
+      { property: "og:title", content: "UrbanCart AI — Workplace productivity tools" },
       {
         property: "og:description",
-        content: "Street-ready essentials, priced in rands with nationwide delivery.",
+        content: "Draft emails, summarise meetings, plan your day and get answers — with AI.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
