@@ -138,8 +138,6 @@ function RootComponent() {
 }
 
 function StoreLayout() {
-  useCartSync();
-
   return (
     <div className="min-h-screen flex flex-col">
       <SiteHeader />

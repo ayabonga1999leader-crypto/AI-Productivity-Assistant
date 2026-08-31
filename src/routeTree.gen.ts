@@ -11,12 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ChatbotRouteImport } from './routes/chatbot'
-import { Route as DeliveryRouteImport } from './routes/delivery'
 import { Route as EmailGeneratorRouteImport } from './routes/email-generator'
 import { Route as MeetingNotesRouteImport } from './routes/meeting-notes'
-import { Route as ShopRouteImport } from './routes/shop'
 import { Route as TaskPlannerRouteImport } from './routes/task-planner'
-import { Route as ProductHandleRouteImport } from './routes/product.$handle'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -26,11 +23,6 @@ const IndexRoute = IndexRouteImport.update({
 const ChatbotRoute = ChatbotRouteImport.update({
   id: '/chatbot',
   path: '/chatbot',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DeliveryRoute = DeliveryRouteImport.update({
-  id: '/delivery',
-  path: '/delivery',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmailGeneratorRoute = EmailGeneratorRouteImport.update({
@@ -43,95 +35,55 @@ const MeetingNotesRoute = MeetingNotesRouteImport.update({
   path: '/meeting-notes',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ShopRoute = ShopRouteImport.update({
-  id: '/shop',
-  path: '/shop',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TaskPlannerRoute = TaskPlannerRouteImport.update({
   id: '/task-planner',
   path: '/task-planner',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProductHandleRoute = ProductHandleRouteImport.update({
-  id: '/product/$handle',
-  path: '/product/$handle',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/chatbot': typeof ChatbotRoute
-  '/delivery': typeof DeliveryRoute
   '/email-generator': typeof EmailGeneratorRoute
   '/meeting-notes': typeof MeetingNotesRoute
-  '/shop': typeof ShopRoute
   '/task-planner': typeof TaskPlannerRoute
-  '/product/$handle': typeof ProductHandleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/chatbot': typeof ChatbotRoute
-  '/delivery': typeof DeliveryRoute
   '/email-generator': typeof EmailGeneratorRoute
   '/meeting-notes': typeof MeetingNotesRoute
-  '/shop': typeof ShopRoute
   '/task-planner': typeof TaskPlannerRoute
-  '/product/$handle': typeof ProductHandleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/chatbot': typeof ChatbotRoute
-  '/delivery': typeof DeliveryRoute
   '/email-generator': typeof EmailGeneratorRoute
   '/meeting-notes': typeof MeetingNotesRoute
-  '/shop': typeof ShopRoute
   '/task-planner': typeof TaskPlannerRoute
-  '/product/$handle': typeof ProductHandleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/chatbot'
-    | '/delivery'
-    | '/email-generator'
-    | '/meeting-notes'
-    | '/shop'
-    | '/task-planner'
-    | '/product/$handle'
+    '/' | '/chatbot' | '/email-generator' | '/meeting-notes' | '/task-planner'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/chatbot'
-    | '/delivery'
-    | '/email-generator'
-    | '/meeting-notes'
-    | '/shop'
-    | '/task-planner'
-    | '/product/$handle'
+  to: '/' | '/chatbot' | '/email-generator' | '/meeting-notes' | '/task-planner'
   id:
     | '__root__'
     | '/'
     | '/chatbot'
-    | '/delivery'
     | '/email-generator'
     | '/meeting-notes'
-    | '/shop'
     | '/task-planner'
-    | '/product/$handle'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChatbotRoute: typeof ChatbotRoute
-  DeliveryRoute: typeof DeliveryRoute
   EmailGeneratorRoute: typeof EmailGeneratorRoute
   MeetingNotesRoute: typeof MeetingNotesRoute
-  ShopRoute: typeof ShopRoute
   TaskPlannerRoute: typeof TaskPlannerRoute
-  ProductHandleRoute: typeof ProductHandleRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -150,13 +102,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChatbotRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/delivery': {
-      id: '/delivery'
-      path: '/delivery'
-      fullPath: '/delivery'
-      preLoaderRoute: typeof DeliveryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/email-generator': {
       id: '/email-generator'
       path: '/email-generator'
@@ -171,25 +116,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeetingNotesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/shop': {
-      id: '/shop'
-      path: '/shop'
-      fullPath: '/shop'
-      preLoaderRoute: typeof ShopRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/task-planner': {
       id: '/task-planner'
       path: '/task-planner'
       fullPath: '/task-planner'
       preLoaderRoute: typeof TaskPlannerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/product/$handle': {
-      id: '/product/$handle'
-      path: '/product/$handle'
-      fullPath: '/product/$handle'
-      preLoaderRoute: typeof ProductHandleRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -198,12 +129,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChatbotRoute: ChatbotRoute,
-  DeliveryRoute: DeliveryRoute,
   EmailGeneratorRoute: EmailGeneratorRoute,
   MeetingNotesRoute: MeetingNotesRoute,
-  ShopRoute: ShopRoute,
   TaskPlannerRoute: TaskPlannerRoute,
-  ProductHandleRoute: ProductHandleRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
