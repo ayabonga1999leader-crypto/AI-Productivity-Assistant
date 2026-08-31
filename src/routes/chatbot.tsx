@@ -27,7 +27,7 @@ export const Route = createFileRoute("/chatbot")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Chatbot;
+  component: Chatbot,
 });
 
 type Msg = { role: "user" | "assistant"; content: string };

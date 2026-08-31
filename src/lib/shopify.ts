@@ -30,6 +30,64 @@ export interface ShopifyProduct {
   };
 }
 
+export interface CartLine {
+  id: string;
+  quantity: number;
+  merchandise: {
+    id: string;
+    title: string;
+    price: { amount: string; currencyCode: string };
+    availableForSale: boolean;
+    selectedOptions: Array<{ name: string; value: string }>;
+    product: {
+      id: string;
+      title: string;
+      handle: string;
+      images: { edges: Array<{ node: { url: string; altText: string | null } }> };
+    };
+  };
+}
+
+export interface ShopifyCart {
+  id: string;
+  checkoutUrl: string;
+  totalQuantity: number;
+  cost: { totalAmount: { amount: string; currencyCode: string } };
+  lines: { edges: Array<{ node: CartLine }> };
+}
+
+const CART_FRAGMENT = `
+  fragment CartFields on Cart {
+    id
+    checkoutUrl
+    totalQuantity
+    cost { totalAmount { amount currencyCode } }
+    lines(first: 50) {
+      edges {
+        node {
+          id
+          quantity
+          merchandise {
+            ... on ProductVariant {
+              id
+              title
+              price { amount currencyCode }
+              availableForSale
+              selectedOptions { name value }
+              product {
+                id
+                title
+                handle
+                images(first: 1) { edges { node { url altText } } }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const STOREFRONT_QUERY = `
   query GetProducts($first: Int!, $query: String) {
     products(first: $first, query: $query) {
@@ -84,6 +142,53 @@ export const PRODUCT_BY_HANDLE_QUERY = `
   }
 `;
 
+const CART_CREATE_MUTATION = `
+  ${CART_FRAGMENT}
+  mutation CartCreate($lines: [CartLineInput!]!) {
+    cartCreate(input: { lines: $lines }) {
+      cart { ...CartFields }
+      userErrors { field message }
+    }
+  }
+`;
+
+const CART_LINES_ADD_MUTATION = `
+  ${CART_FRAGMENT}
+  mutation CartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
+    cartLinesAdd(cartId: $cartId, lines: $lines) {
+      cart { ...CartFields }
+      userErrors { field message }
+    }
+  }
+`;
+
+const CART_LINES_UPDATE_MUTATION = `
+  ${CART_FRAGMENT}
+  mutation CartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+    cartLinesUpdate(cartId: $cartId, lines: $lines) {
+      cart { ...CartFields }
+      userErrors { field message }
+    }
+  }
+`;
+
+const CART_LINES_REMOVE_MUTATION = `
+  ${CART_FRAGMENT}
+  mutation CartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+    cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+      cart { ...CartFields }
+      userErrors { field message }
+    }
+  }
+`;
+
+const CART_QUERY = `
+  ${CART_FRAGMENT}
+  query GetCart($cartId: ID!) {
+    cart(id: $cartId) { ...CartFields }
+  }
+`;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function storefrontApiRequest(query: string, variables: any = {}): Promise<any> {
   const response = await fetch(SHOPIFY_STOREFRONT_URL, {
@@ -124,6 +229,42 @@ export async function fetchProductByHandle(handle: string): Promise<ShopifyProdu
   const data = await storefrontApiRequest(PRODUCT_BY_HANDLE_QUERY, { handle });
   const product = data?.data?.product;
   return product ? { node: product } : null;
+}
+
+export async function createCart(
+  lines: Array<{ merchandiseId: string; quantity: number }>,
+): Promise<ShopifyCart | null> {
+  const data = await storefrontApiRequest(CART_CREATE_MUTATION, { lines });
+  return data?.data?.cartCreate?.cart ?? null;
+}
+
+export async function addLinesToCart(
+  cartId: string,
+  lines: Array<{ merchandiseId: string; quantity: number }>,
+): Promise<ShopifyCart | null> {
+  const data = await storefrontApiRequest(CART_LINES_ADD_MUTATION, { cartId, lines });
+  return data?.data?.cartLinesAdd?.cart ?? null;
+}
+
+export async function updateCartLines(
+  cartId: string,
+  lines: Array<{ id: string; quantity: number }>,
+): Promise<ShopifyCart | null> {
+  const data = await storefrontApiRequest(CART_LINES_UPDATE_MUTATION, { cartId, lines });
+  return data?.data?.cartLinesUpdate?.cart ?? null;
+}
+
+export async function removeCartLines(
+  cartId: string,
+  lineIds: string[],
+): Promise<ShopifyCart | null> {
+  const data = await storefrontApiRequest(CART_LINES_REMOVE_MUTATION, { cartId, lineIds });
+  return data?.data?.cartLinesRemove?.cart ?? null;
+}
+
+export async function fetchCart(cartId: string): Promise<ShopifyCart | null> {
+  const data = await storefrontApiRequest(CART_QUERY, { cartId });
+  return data?.data?.cart ?? null;
 }
 
 export function formatMoney(amount: string | number, currencyCode = "ZAR") {
