@@ -82,7 +82,7 @@ function ShopPage() {
   const products = data ?? [];
 
   const allBrands = useMemo(
-    () => Array.from(new Set(products.map((p) => p.node.title.split(" ")[0]))).sort(),
+    () => Array.from(new Set(products.map((p) => p.node.title.split(" ")[0] ?? ""))).sort(),
     [products],
   );
   const ceiling = useMemo(
@@ -92,7 +92,7 @@ function ShopPage() {
 
   const visible = useMemo(() => {
     let list = products.filter((p) => {
-      const brandOk = brands.length === 0 || brands.includes(p.node.title.split(" ")[0]);
+      const brandOk = brands.length === 0 || brands.includes(p.node.title.split(" ")[0] ?? "");
       const priceOk = maxPrice === null || price(p) <= maxPrice;
       return brandOk && priceOk;
     });
@@ -180,7 +180,7 @@ function ShopPage() {
                 max={ceiling}
                 min={100}
                 step={100}
-                onValueChange={([v]) => setMaxPrice(v)}
+                onValueChange={([v]) => setMaxPrice(v ?? null)}
               />
               <p className="mt-2 font-mono text-sm">up to {formatMoney(maxPrice ?? ceiling)}</p>
             </div>
