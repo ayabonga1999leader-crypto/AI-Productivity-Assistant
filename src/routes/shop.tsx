@@ -19,20 +19,26 @@ import {
 type Sort = "featured" | "price-asc" | "price-desc" | "title";
 
 interface ShopSearch {
-  q?: string;
-  category?: string;
-  sort?: Sort;
+  q?: string | undefined;
+  category?: string | undefined;
+  sort?: Sort | undefined;
 }
 
 export const Route = createFileRoute("/shop")({
-  validateSearch: (search: Record<string, unknown>): ShopSearch => ({
-    q: typeof search.q === "string" && search.q ? search.q : undefined,
-    category:
-      typeof search.category === "string" && search.category ? search.category : undefined,
-    sort: (["price-asc", "price-desc", "title"] as const).includes(search.sort as Sort)
-      ? (search.sort as Sort)
-      : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): ShopSearch => {
+    const rawSort = search["sort"];
+    return {
+      q: typeof search["q"] === "string" && search["q"] ? (search["q"] as string) : undefined,
+      category:
+        typeof search["category"] === "string" && search["category"]
+          ? (search["category"] as string)
+          : undefined,
+      sort:
+        rawSort === "price-asc" || rawSort === "price-desc" || rawSort === "title"
+          ? rawSort
+          : undefined,
+    };
+  },
   head: () => ({
     meta: [
       { title: "Shop all products — UrbanCart South Africa" },
