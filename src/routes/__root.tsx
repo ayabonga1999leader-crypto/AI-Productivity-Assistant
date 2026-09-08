@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Toaster } from "@/components/ui/sonner";
+import { useCartSync } from "@/hooks/useCartSync";
 
 
 function NotFoundComponent() {
@@ -81,16 +82,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "UrbanCart AI — Workplace productivity tools" },
+      { title: "UrbanCart — Online shopping in South Africa" },
       {
         name: "description",
         content:
-          "UrbanCart AI is a suite of workplace tools: smart email drafting, meeting notes summaries, task planning and a productivity chatbot.",
+          "UrbanCart is South Africa's marketplace for fashion, electronics, beauty, home and fitness. Rand pricing, nationwide delivery.",
       },
-      { property: "og:title", content: "UrbanCart AI — Workplace productivity tools" },
+      { property: "og:title", content: "UrbanCart — Online shopping in South Africa" },
       {
         property: "og:description",
-        content: "Draft emails, summarise meetings, plan your day and get answers — with AI.",
+        content: "Fashion, tech, beauty and home essentials in ZAR, delivered across South Africa.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -138,6 +139,7 @@ function RootComponent() {
 }
 
 function StoreLayout() {
+  useCartSync();
   return (
     <div className="min-h-screen flex flex-col">
       <SiteHeader />
