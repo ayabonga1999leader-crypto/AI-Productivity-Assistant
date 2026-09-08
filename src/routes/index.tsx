@@ -1,106 +1,71 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  ArrowRight,
-  Bot,
-  FileText,
-  ListChecks,
-  Mail,
-  ShieldCheck,
-  Sparkles,
-  Zap,
-} from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { ArrowRight, Loader2, RefreshCw, ShieldCheck, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ToolCard } from "@/components/ToolCard";
-import heroAi from "@/assets/hero-ai.jpg";
-
-const tools = [
-  {
-    to: "/email-generator",
-    name: "Smart Email Generator",
-    tagline: "AI tool 01",
-    description:
-      "Describe the email you need — purpose, tone, length — and get a polished draft with subject line in seconds.",
-    icon: Mail,
-  },
-  {
-    to: "/meeting-notes",
-    name: "Meeting Notes Summarizer",
-    tagline: "AI tool 02",
-    description:
-      "Paste raw notes or a transcript and get a clean summary with decisions, action items and owners.",
-    icon: FileText,
-  },
-  {
-    to: "/task-planner",
-    name: "AI Task Planner",
-    tagline: "AI tool 03",
-    description:
-      "Turn a messy goal list into a prioritised, realistic plan that fits the hours you actually have.",
-    icon: ListChecks,
-  },
-  {
-    to: "/chatbot",
-    name: "AI Chatbot",
-    tagline: "AI tool 04",
-    description:
-      "Ask Ada anything about workplace productivity — writing, planning, meeting prep and process.",
-    icon: Bot,
-  },
-] as const;
+import { ProductCard } from "@/components/ProductCard";
+import { CATEGORIES } from "@/lib/categories";
+import { fetchProducts } from "@/lib/shopify";
+import hero from "@/assets/hero.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "UrbanCart AI — Workplace productivity tools" },
+      { title: "UrbanCart — Online shopping in South Africa" },
       {
         name: "description",
         content:
-          "Four AI tools for everyday workplace admin: smart email drafting, meeting notes summaries, task planning and a productivity chatbot.",
+          "Shop fashion, electronics, beauty, home and fitness at UrbanCart. Rand pricing, nationwide delivery and free shipping on orders over R500.",
       },
-      { property: "og:title", content: "UrbanCart AI — Workplace productivity tools" },
+      { property: "og:title", content: "UrbanCart — Online shopping in South Africa" },
       {
         property: "og:description",
-        content:
-          "Draft emails, summarise meetings, plan your week and get answers — four AI tools, one workspace.",
+        content: "Fashion, tech, beauty and home essentials in ZAR, delivered across South Africa.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Home,
 });
 
 function Home() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["products", "trending"],
+    queryFn: () => fetchProducts(8),
+  });
+
   return (
     <>
       <section className="relative">
-        <div className="relative aspect-[16/10] sm:aspect-[21/9] overflow-hidden bg-muted">
+        <div className="relative aspect-[16/11] sm:aspect-[21/9] overflow-hidden bg-muted">
           <img
-            src={heroAi}
-            alt="Abstract workspace illustration with warm light and geometric shapes"
-            width={1600}
-            height={1104}
-            className="w-full h-full object-cover"
+            src={hero}
+            alt="Shopper carrying UrbanCart bags on a sunlit city street"
+            className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/50 to-transparent" />
         </div>
         <div className="absolute inset-0 flex items-center">
-          <div className="mx-auto max-w-[1400px] w-full px-5 sm:px-8">
+          <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
             <div className="max-w-xl">
-              <p className="label-mono text-accent">AI workplace tools</p>
-              <h1 className="mt-4 text-4xl sm:text-6xl lg:text-7xl leading-[0.9] uppercase">
-                Do the work that matters
+              <p className="label-mono text-accent">New season · Spring 2026</p>
+              <h1 className="mt-4 text-4xl uppercase leading-[0.9] sm:text-6xl lg:text-7xl">
+                Everything you need, in one cart
               </h1>
-              <p className="mt-5 text-sm sm:text-base text-muted-foreground max-w-md">
-                UrbanCart AI handles the admin — drafting emails, summarising meetings, planning
-                your day — so you can focus on the real work.
+              <p className="mt-5 max-w-md text-sm text-muted-foreground sm:text-base">
+                Fashion, tech, beauty and home — priced in rand and delivered anywhere in South
+                Africa.
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
-                <Button asChild size="lg" className="rounded-none">
-                  <Link to="/email-generator">
-                    Try the email generator <ArrowRight className="ml-2 h-4 w-4" />
+                <Button asChild size="lg" className="rounded-full">
+                  <Link to="/shop" search={{ q: undefined, category: undefined, sort: undefined }}>
+                    Shop all products <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="rounded-none">
-                  <Link to="/chatbot">Ask the chatbot</Link>
+                <Button asChild size="lg" variant="outline" className="rounded-full">
+                  <Link to="/shop" search={{ category: "Fashion", q: undefined, sort: undefined }}>
+                    Shop fashion
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -109,65 +74,76 @@ function Home() {
       </section>
 
       <section className="border-y border-border bg-surface">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8 py-5 grid gap-4 sm:grid-cols-3 text-sm">
+        <div className="mx-auto grid max-w-[1400px] gap-4 px-5 py-5 text-sm sm:grid-cols-3 sm:px-8">
           <div className="flex items-center gap-3">
-            <Zap className="h-4 w-4 text-accent" />
-            <span>Results in seconds, not hours</span>
+            <Truck className="h-4 w-4 text-accent" />
+            <span>Free delivery on orders over R500</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <RefreshCw className="h-4 w-4 text-accent" />
+            <span>30-day easy returns</span>
           </div>
           <div className="flex items-center gap-3">
             <ShieldCheck className="h-4 w-4 text-accent" />
-            <span>Human in the loop, always</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <Sparkles className="h-4 w-4 text-accent" />
-            <span>Four tools, one workspace</span>
+            <span>Secure checkout, ZAR pricing</span>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1400px] px-5 sm:px-8 py-14">
-        <div className="flex items-end justify-between mb-8">
-          <h2 className="text-2xl sm:text-3xl uppercase">The toolkit</h2>
-          <p className="label-mono text-muted-foreground">4 tools</p>
+      <section className="mx-auto max-w-[1400px] px-5 py-14 sm:px-8">
+        <div className="mb-8 flex items-end justify-between">
+          <h2 className="text-2xl uppercase sm:text-3xl">Shop by category</h2>
+          <p className="label-mono text-muted-foreground">{CATEGORIES.length} departments</p>
         </div>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {tools.map((tool) => (
-            <ToolCard key={tool.to} {...tool} />
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {CATEGORIES.map((c) => (
+            <Link
+              key={c.slug}
+              to="/shop"
+              search={{ category: c.name, q: undefined, sort: undefined }}
+              className="group relative overflow-hidden rounded-2xl bg-muted"
+            >
+              <div className="aspect-[4/3] overflow-hidden">
+                <img
+                  src={c.image}
+                  alt={c.name}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 to-transparent" />
+              <div className="absolute bottom-0 p-5 text-background">
+                <p className="text-lg font-semibold">{c.name}</p>
+                <p className="text-sm opacity-80">{c.blurb}</p>
+              </div>
+            </Link>
           ))}
         </div>
       </section>
 
       <section className="border-t border-border bg-surface">
-        <div className="mx-auto max-w-[1400px] px-5 sm:px-8 py-14 grid gap-8 lg:grid-cols-2 items-center">
-          <div>
-            <p className="label-mono text-accent">Responsible AI</p>
-            <h2 className="mt-3 text-2xl sm:text-3xl uppercase">You stay in charge</h2>
-            <p className="mt-4 max-w-[52ch] text-sm text-muted-foreground">
-              AI can be wrong, miss context or misread tone. Every tool here is designed for a
-              human-in-the-loop workflow: review the output, edit it, and only then send or share
-              it. Keep confidential or personal information out of your prompts.
-            </p>
+        <div className="mx-auto max-w-[1400px] px-5 py-14 sm:px-8">
+          <div className="mb-8 flex items-end justify-between">
+            <h2 className="text-2xl uppercase sm:text-3xl">Trending now</h2>
+            <Link
+              to="/shop"
+              search={{ q: undefined, category: undefined, sort: undefined }}
+              className="label-mono text-muted-foreground transition-colors hover:text-foreground"
+            >
+              View all
+            </Link>
           </div>
-          <div className="grid gap-3 text-sm">
-            <div className="border border-border bg-background p-4">
-              <p className="font-semibold">Review before sending</p>
-              <p className="mt-1 text-muted-foreground">
-                Treat every output as a draft — check facts, names and tone.
-              </p>
+          {isLoading ? (
+            <div className="flex justify-center py-16">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
             </div>
-            <div className="border border-border bg-background p-4">
-              <p className="font-semibold">Protect sensitive data</p>
-              <p className="mt-1 text-muted-foreground">
-                Don't paste passwords, ID numbers or confidential business data into prompts.
-              </p>
+          ) : (
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {(data ?? []).slice(0, 8).map((p) => (
+                <ProductCard key={p.node.id} product={p} />
+              ))}
             </div>
-            <div className="border border-border bg-background p-4">
-              <p className="font-semibold">Own the final word</p>
-              <p className="mt-1 text-muted-foreground">
-                You're responsible for what you send, publish or decide — not the AI.
-              </p>
-            </div>
-          </div>
+          )}
         </div>
       </section>
     </>
