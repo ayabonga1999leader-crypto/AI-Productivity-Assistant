@@ -20,8 +20,8 @@ type Props = {
   title?: string;
   text: string;
   isLoading: boolean;
-  error?: string | null;
-  onRegenerate?: () => void;
+  error?: string | null | undefined;
+  onRegenerate?: (() => void) | undefined;
   emptyHint: string;
 };
 
