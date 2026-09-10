@@ -10,92 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AccountRouteImport } from './routes/account'
-import { Route as DeliveryRouteImport } from './routes/delivery'
-import { Route as ShopRouteImport } from './routes/shop'
-import { Route as WishlistRouteImport } from './routes/wishlist'
-import { Route as ProductHandleRouteImport } from './routes/product.$handle'
+import { Route as EmailRouteImport } from './routes/email'
+import { Route as MeetingNotesRouteImport } from './routes/meeting-notes'
+import { Route as PlannerRouteImport } from './routes/planner'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AccountRoute = AccountRouteImport.update({
-  id: '/account',
-  path: '/account',
+const EmailRoute = EmailRouteImport.update({
+  id: '/email',
+  path: '/email',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DeliveryRoute = DeliveryRouteImport.update({
-  id: '/delivery',
-  path: '/delivery',
+const MeetingNotesRoute = MeetingNotesRouteImport.update({
+  id: '/meeting-notes',
+  path: '/meeting-notes',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ShopRoute = ShopRouteImport.update({
-  id: '/shop',
-  path: '/shop',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const WishlistRoute = WishlistRouteImport.update({
-  id: '/wishlist',
-  path: '/wishlist',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProductHandleRoute = ProductHandleRouteImport.update({
-  id: '/product/$handle',
-  path: '/product/$handle',
+const PlannerRoute = PlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/account': typeof AccountRoute
-  '/delivery': typeof DeliveryRoute
-  '/shop': typeof ShopRoute
-  '/wishlist': typeof WishlistRoute
-  '/product/$handle': typeof ProductHandleRoute
+  '/email': typeof EmailRoute
+  '/meeting-notes': typeof MeetingNotesRoute
+  '/planner': typeof PlannerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/account': typeof AccountRoute
-  '/delivery': typeof DeliveryRoute
-  '/shop': typeof ShopRoute
-  '/wishlist': typeof WishlistRoute
-  '/product/$handle': typeof ProductHandleRoute
+  '/email': typeof EmailRoute
+  '/meeting-notes': typeof MeetingNotesRoute
+  '/planner': typeof PlannerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/account': typeof AccountRoute
-  '/delivery': typeof DeliveryRoute
-  '/shop': typeof ShopRoute
-  '/wishlist': typeof WishlistRoute
-  '/product/$handle': typeof ProductHandleRoute
+  '/email': typeof EmailRoute
+  '/meeting-notes': typeof MeetingNotesRoute
+  '/planner': typeof PlannerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    '/' | '/account' | '/delivery' | '/shop' | '/wishlist' | '/product/$handle'
+  fullPaths: '/' | '/email' | '/meeting-notes' | '/planner'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    '/' | '/account' | '/delivery' | '/shop' | '/wishlist' | '/product/$handle'
-  id:
-    | '__root__'
-    | '/'
-    | '/account'
-    | '/delivery'
-    | '/shop'
-    | '/wishlist'
-    | '/product/$handle'
+  to: '/' | '/email' | '/meeting-notes' | '/planner'
+  id: '__root__' | '/' | '/email' | '/meeting-notes' | '/planner'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AccountRoute: typeof AccountRoute
-  DeliveryRoute: typeof DeliveryRoute
-  ShopRoute: typeof ShopRoute
-  WishlistRoute: typeof WishlistRoute
-  ProductHandleRoute: typeof ProductHandleRoute
+  EmailRoute: typeof EmailRoute
+  MeetingNotesRoute: typeof MeetingNotesRoute
+  PlannerRoute: typeof PlannerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -107,39 +78,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/account': {
-      id: '/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AccountRouteImport
+    '/email': {
+      id: '/email'
+      path: '/email'
+      fullPath: '/email'
+      preLoaderRoute: typeof EmailRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/delivery': {
-      id: '/delivery'
-      path: '/delivery'
-      fullPath: '/delivery'
-      preLoaderRoute: typeof DeliveryRouteImport
+    '/meeting-notes': {
+      id: '/meeting-notes'
+      path: '/meeting-notes'
+      fullPath: '/meeting-notes'
+      preLoaderRoute: typeof MeetingNotesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/shop': {
-      id: '/shop'
-      path: '/shop'
-      fullPath: '/shop'
-      preLoaderRoute: typeof ShopRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/wishlist': {
-      id: '/wishlist'
-      path: '/wishlist'
-      fullPath: '/wishlist'
-      preLoaderRoute: typeof WishlistRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/product/$handle': {
-      id: '/product/$handle'
-      path: '/product/$handle'
-      fullPath: '/product/$handle'
-      preLoaderRoute: typeof ProductHandleRouteImport
+    '/planner': {
+      id: '/planner'
+      path: '/planner'
+      fullPath: '/planner'
+      preLoaderRoute: typeof PlannerRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -147,11 +104,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AccountRoute: AccountRoute,
-  DeliveryRoute: DeliveryRoute,
-  ShopRoute: ShopRoute,
-  WishlistRoute: WishlistRoute,
-  ProductHandleRoute: ProductHandleRoute,
+  EmailRoute: EmailRoute,
+  MeetingNotesRoute: MeetingNotesRoute,
+  PlannerRoute: PlannerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
